@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lista de Vehículos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-5">
+            <i class="bi bi-car-front-fill text-primary"></i> 
+            Vehículos Registrados
+        </h1>
+        <a href="{% url 'vehiculos:agregar' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Nuevo Vehículo
+        </a>
+    </div>
+
+    <!-- Barra de búsqueda -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" action="{% url 'vehiculos:listar' %}" class="row g-3">
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            name="q" 
+                            value="{{ query }}"
+                            placeholder="Buscar por marca, modelo, patente, color o tipo de combustible..."
+                            autofocus
+                        >
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                </div>
+                {% if query %}
+                <div class="col-12">
+                    <a href="{% url 'vehiculos:listar' %}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-x-circle"></i> Limpiar búsqueda
+                    </a>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabla de vehículos -->
+    {% if vehiculos %}
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-list-check"></i> 
+                    Total: {{ vehiculos.count }} vehículo(s)
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Año</th>
+                                <th>Patente</th>
+                                <th>Precio</th>
+                                <th>Color</th>
+                                <th>Combustible</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vehiculo in vehiculos %}
+                            <tr>
+                                <td><strong>{{ vehiculo.id }}</strong></td>
+                                <td>{{ vehiculo.marca }}</td>
+                                <td>{{ vehiculo.modelo }}</td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ vehiculo.año }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info text-dark">{{ vehiculo.patente }}</span>
+                                </td>
+                                <td>${{ vehiculo.precio|floatformat:0 }}</td>
+                                <td>
+                                        {{ vehiculo.color }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if vehiculo.tipo_combustible == 'electrico' %}
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-lightning-charge"></i> {{ vehiculo.get_tipo_combustible_display }}
+                                        </span>
+                                    {% elif vehiculo.tipo_combustible == 'hibrido' %}
+                                        <span class="badge bg-info">
+                                            <i class="bi bi-battery-charging"></i> {{ vehiculo.get_tipo_combustible_display }}
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="bi bi-fuel-pump"></i> {{ vehiculo.get_tipo_combustible_display }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="{% url 'vehiculo:detalle' vehiculo.id %}" 
+                                           class="btn btn-info" 
+                                           title="Ver detalle">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="{% url 'vehiculos:editar' vehiculo.id %}" 
+                                           class="btn btn-warning" 
+                                           title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a href="{% url 'vehiculos:eliminar' vehiculo.id %}" 
+                                           class="btn btn-danger" 
+                                           title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center" role="alert">
+            <i class="bi bi-exclamation-triangle fs-1"></i>
+            <h4 class="alert-heading mt-3">No hay vehículos registrados</h4>
+            <p>Comienza agregando tu primer vehículo.</p>
+            <hr>
+            <a href="{% url 'vehiculos:agregar' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Agregar Vehículo
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
