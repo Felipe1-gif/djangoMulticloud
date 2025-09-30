@@ -5,7 +5,7 @@ from .models import Vehiculo
 class VehiculoForm(forms.ModelForm):
     class Meta:
         model = Vehiculo
-        fields = ['marca', 'modelo', 'año',  'color', 'combustible']
+        fields = ['marca', 'modelo', 'anio',  'color', 'combustible']
         
         # Aplicar estilos Bootstrap a todos los campos
         widgets = {
