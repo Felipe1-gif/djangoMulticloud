@@ -32,3 +32,8 @@ def eliminar_vehiculo(request,id):
     vehiculo = Vehiculo.objects.get(id=id)
     vehiculo.delete()
     return redirect("vehiculo:vehiculos")
+
+def buscar_vehiculo(request,id):
+    vehiculo = Vehiculo.objects.get(id=id)
+    data={'vehiculo':vehiculo}
+    return render(request,'modelVehiculo/buscar.html',data)
