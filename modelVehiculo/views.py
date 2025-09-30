@@ -8,7 +8,6 @@ def index(request):
         form=forms.VehiculoForm(request.POST)
         if form.is_valid():
             print("Formulario OK")
-            print("Vehiculo: ",form.cleaned_data['vehiculo'])
             #ver información procesada desde el form
             form.save()
             return redirect('vehiculo:vehiculos')
