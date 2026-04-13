@@ -32,7 +32,7 @@ except Exception:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True") == "True"
-ALLOWED_HOSTS = ['100.30.1.118']
+ALLOWED_HOSTS = ['100.50.197.199','localhost','127.0.0.1']
 
 
 # Application definition
